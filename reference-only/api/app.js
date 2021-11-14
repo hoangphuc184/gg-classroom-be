@@ -4,7 +4,10 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 
+const passport = require("./modules/passport");
 const classes = require("./routes/classRoute");
+const users = require("./routes/userRoute");
+const authenticateRouter = require("./modules/passport/authenticateRouter");
 
 const app = express();
 
@@ -30,7 +33,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/classes", classes);
+app.use(passport.initialize());
+
+app.use("/classes", passport.authenticate("jwt", { session: false }), classes);
+app.use("/users", users);
+app.use("/login", authenticateRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
