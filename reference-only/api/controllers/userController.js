@@ -19,19 +19,24 @@ exports.findByObj = async (req, res) => {
   }
 };
 
-exports.create = function (req, res) {
+exports.create = async function (req, res) {
   try {
     const userObj = {
       username: req.body.username,
       password: req.body.password,
     };
-    const userId = userService.create(userObj);
-    if (userId) {
-      res.status(200).json({ message: "User created" });
+    const User = await userService.findByObj(userObj);
+    if (User) {
+      res.status(404).json({ message: "User already existed" });
     } else {
-      res
-        .status(404)
-        .json({ message: "The user with the given ID was not found" });
+      const userId = await userService.create(userObj);
+      if (userId) {
+        res.status(200).json({ message: "User created" });
+      } else {
+        res
+          .status(500)
+          .json({ message: "Error creating user" });
+      }
     }
   } catch (err) {
     next(err);
@@ -39,15 +44,15 @@ exports.create = function (req, res) {
 };
 
 exports.list = async (req, res) => {
-    try {
-        const users = await userService.list();
-    
-        if (users) {
-          res.status(200).json(users);
-        } else {
-          res.status(404).json({ message: "No classes were not found" });
-        }
-      } catch (err) {
-        next(err);
-      }
-}
+  try {
+    const users = await userService.list();
+
+    if (users) {
+      res.status(200).json(users);
+    } else {
+      res.status(404).json({ message: "No classes were not found" });
+    }
+  } catch (err) {
+    next(err);
+  }
+};
