@@ -7,7 +7,8 @@ const logger = require("morgan");
 const passport = require("./modules/passport");
 const classes = require("./routes/classRoute");
 const users = require("./routes/userRoute");
-const authenticateRouter = require("./modules/passport/authenticateRouter");
+const loginRouter = require("./modules/passport/loginRouter");
+const signupRouter = require("./modules/passport/signupRouter");
 
 const app = express();
 
@@ -37,7 +38,8 @@ app.use(passport.initialize());
 
 app.use("/classes", passport.authenticate("jwt", { session: false }), classes);
 app.use("/users", users);
-app.use("/login", authenticateRouter);
+app.use("/login", loginRouter);
+app.use("/signup", signupRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -3,18 +3,22 @@ const passport = require("passport"),
 const JwtStrategy = require("passport-jwt").Strategy,
   ExtractJwt = require("passport-jwt").ExtractJwt;
 
-// const userController = require("../../controllers/userController");
 const userService = require("../../services/userService");
 
 passport.use(
-  new LocalStrategy(function (username, password, done) {
+  new LocalStrategy(async function (username, password, done) {
     const obj = {
       username: username,
       password: password,
     };
-    const User = userService.findByObj(obj);
-    if (User) return done(null, User);
-    return done(null, false, { message: "Invalid username or password" });
+    const User = await userService.findByObj(obj);
+    if (User) {
+      console.log("Login success");
+      return done(null, User);
+    } else {
+      console.log("Login failed");
+      return done(null, false, { message: "Invalid username or password" });
+    }
   })
 );
 
