@@ -28,6 +28,11 @@ exports.create = async (req, res) => {
       phoneNumber: req.body.phoneNumber,
       fullName: req.body.fullName,
     };
+
+    if (!user.role && !user.studentID) {
+      res.status(200).json({ message: "Student ID can't be null" });
+      return;
+    }
     const userRes = await userService.create(user);
     if (userRes.dataValues.role === true) {
       res.status(200).json({ message: "Teacher created!" });
