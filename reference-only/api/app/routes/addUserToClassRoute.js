@@ -4,6 +4,6 @@ module.exports = (app) => {
   var router = require("express").Router();
 
   router.post("/", addUser.addUser);
-
+  router.post("/join", addUser.joinClass);
   app.use("/api/addUser", router);
 };

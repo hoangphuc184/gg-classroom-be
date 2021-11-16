@@ -19,3 +19,21 @@ exports.addUser = async (req, res) => {
     console.log(err);
   }
 };
+
+exports.joinClass = async (req, res) => {
+  try {
+    const classID = req.query.classid;
+    const username = req.query.username;
+    console.log(classID, username);
+    const addUserRes = await addUser.joinClass(classID, username);
+    if (!addUserRes) {
+      res
+        .status(200)
+        .json({ message: "Error! Class or Student is not found!" });
+      return;
+    }
+    res.status(200).json({ message: "Added!" });
+  } catch (err) {
+    console.log(err);
+  }
+};
