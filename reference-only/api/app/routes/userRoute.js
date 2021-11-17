@@ -1,13 +1,8 @@
 module.exports = (app) => {
   const users = require("../controllers/userController.js");
+  const { authJwt } = require("../middlewares");
 
-  var router = require("express").Router();
+  app.get("/api/users", [authJwt.verifyToken, authJwt.isTecherOrAdmin], users.findAll);
 
-  router.post("/", users.create);
-
-  router.get("/", users.findAll);
-
-  router.get("/:id", users.findById);
-
-  app.use("/api/users", router);
+  app.get("/api/users/:id", [authJwt.verifyToken, authJwt.isTecherOrAdmin], users.findById);
 };

@@ -1,13 +1,10 @@
 module.exports = (app) => {
   const classes = require("../controllers/classController");
+  const { authJwt } = require("../middlewares");
 
-  var router = require("express").Router();
+  app.post("/api/classes", [authJwt.verifyToken, authJwt.isTeacher], classes.create);
 
-  router.post("/", classes.create);
+  app.get("/api/classes", [authJwt.verifyToken], classes.findAll);
 
-  router.get("/", classes.findAll);
-
-  router.get("/:id", classes.findById);
-
-  app.use("/api/classes", router);
+  app.get("/api/classes/:id", [authJwt.verifyToken], classes.findById);
 };

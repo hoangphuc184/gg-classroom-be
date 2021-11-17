@@ -1,50 +1,50 @@
 const userService = require("../services/userService");
-exports.create = async (req, res) => {
-  // Validate request
-  if (!req.body.username || !req.body.password) {
-    res.status(400).send({
-      message: "Content can not be empty!",
-    });
-    return;
-  }
+// exports.create = async (req, res) => {
+//   // Validate request
+//   if (!req.body.username || !req.body.password) {
+//     res.status(400).send({
+//       message: "Content can not be empty!",
+//     });
+//     return;
+//   }
 
-  if (req.body.role && req.body.studentID) {
-    res.status(400).send({
-      message: "Teacher can't have student ID",
-    });
-    return;
-  }
+//   if (req.body.role && req.body.studentID) {
+//     res.status(400).send({
+//       message: "Teacher can't have student ID",
+//     });
+//     return;
+//   }
 
-  // Create a User
+//   // Create a User
 
-  try {
-    const user = {
-      username: req.body.username,
-      password: req.body.password,
-      role: req.body.role,
-      studentID: req.body.studentID,
-      DOB: req.body.DOB,
-      email: req.body.email,
-      phoneNumber: req.body.phoneNumber,
-      fullName: req.body.fullName,
-    };
+//   try {
+//     const user = {
+//       username: req.body.username,
+//       password: req.body.password,
+//       role: req.body.role,
+//       studentID: req.body.studentID,
+//       DOB: req.body.DOB,
+//       email: req.body.email,
+//       phoneNumber: req.body.phoneNumber,
+//       fullName: req.body.fullName,
+//     };
 
-    if (!user.role && !user.studentID) {
-      res.status(200).json({ message: "Student ID can't be null" });
-      return;
-    }
-    const userRes = await userService.create(user);
-    if (userRes.dataValues.role === true) {
-      res.status(200).json({ message: "Teacher created!" });
-    } else if (userRes.dataValues.role === false) {
-      res.status(200).json({ message: "Student created!" });
-    } else {
-      res.status(404).json({ message: "Error!" });
-    }
-  } catch (err) {
-    console.log(err);
-  }
-};
+//     if (!user.role && !user.studentID) {
+//       res.status(200).json({ message: "Student ID can't be null" });
+//       return;
+//     }
+//     const userRes = await userService.create(user);
+//     if (userRes.dataValues.role === true) {
+//       res.status(200).json({ message: "Teacher created!" });
+//     } else if (userRes.dataValues.role === false) {
+//       res.status(200).json({ message: "Student created!" });
+//     } else {
+//       res.status(404).json({ message: "Error!" });
+//     }
+//   } catch (err) {
+//     console.log(err);
+//   }
+// };
 
 exports.findAll = async (req, res) => {
   try {
