@@ -4,10 +4,6 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.STRING,
       allowNull: true,
     },
-    role: {
-      type: Sequelize.BOOLEAN,
-      allowNull: false,
-    },
     username: {
       type: Sequelize.STRING,
       allowNull: false,
