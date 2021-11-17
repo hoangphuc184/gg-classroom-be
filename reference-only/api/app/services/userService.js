@@ -23,6 +23,15 @@ exports.findAll = async () => {
   });
 };
 
+exports.findForLogin = async (obj) => {
+  return await User.findOne({
+    where: {
+      username: obj.username,
+      password: obj.password,
+    },
+  });
+};
+
 exports.findById = async (id) => {
   return await User.findByPk(id, {
     include: [
