@@ -1,15 +1,38 @@
 const express = require("express");
 const cors = require("cors");
 
-require("dotenv").config();
 const app = express();
-const passport = require('./app/auth/login');
 const db = require("./app/models");
-db.sequelize.sync();
+
+// - For development purpose, use these lines of code to drop table and re-sync database, then call function initial() to initialize role
+
+// const Role = db.roles;
+
+// function initial() {
+//   Role.create({
+//     id: 1,
+//     name: "student"
+//   });
+ 
+//   Role.create({
+//     id: 2,
+//     name: "teacher"
+//   });
+ 
+//   Role.create({
+//     id: 3,
+//     name: "admin"
+//   });
+// }
 
 // db.sequelize.sync({ force: true }).then(() => {
 //   console.log("Drop and re-sync db.");
+//   initial();
 // });
+
+// - For production, just use sync() function to sync the database and avoid dropping data, role will need to be initialized mannually through query in database
+db.sequelize.sync();
+
 
 const corsOptions = {
   origin: "*",
@@ -30,9 +53,8 @@ app.get("/", (req, res) => {
   res.json({ message: "Welcome to bezkoder application." });
 });
 
-app.use(passport.initialize());
-
-require("./app/auth/login/loginRouter")(app);
+require("./app/routes/authRoutes")(app);
+require("./app/routes/userAuthoRoutes")(app);
 require("./app/routes/userRoute")(app);
 require("./app/routes/classRoute")(app);
 require("./app/routes/addUserToClassRoute")(app);

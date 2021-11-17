@@ -17,7 +17,6 @@ exports.findAll = async () => {
         attributes: [
           "id",
           "studentID",
-          "role",
           "username",
           "fullName",
           "DOB",
@@ -41,7 +40,6 @@ exports.findById = async (id) => {
         attributes: [
           "id",
           "studentID",
-          "role",
           "username",
           "fullName",
           "DOB",

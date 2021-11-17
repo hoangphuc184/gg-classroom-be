@@ -4,10 +4,6 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.STRING,
       allowNull: true,
     },
-    role: {
-      type: Sequelize.BOOLEAN,
-      allowNull: false,
-    },
     username: {
       type: Sequelize.STRING,
       allowNull: false,
@@ -18,7 +14,7 @@ module.exports = (sequelize, Sequelize) => {
     },
     DOB: {
       type: Sequelize.DATEONLY,
-      allowNull: false,
+      allowNull: true,
     },
     email: {
       type: Sequelize.STRING,
@@ -26,11 +22,11 @@ module.exports = (sequelize, Sequelize) => {
     },
     phoneNumber: {
       type: Sequelize.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     fullName: {
       type: Sequelize.STRING,
-      allowNull: false,
+      allowNull: true,
     },
   });
 
