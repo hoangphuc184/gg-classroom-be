@@ -40,7 +40,6 @@ exports.findById = async (id) => {
         attributes: [
           "id",
           "studentID",
-          "role",
           "username",
           "fullName",
           "DOB",

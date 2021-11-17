@@ -14,7 +14,7 @@ module.exports = (sequelize, Sequelize) => {
     },
     DOB: {
       type: Sequelize.DATEONLY,
-      allowNull: false,
+      allowNull: true,
     },
     email: {
       type: Sequelize.STRING,
@@ -22,11 +22,11 @@ module.exports = (sequelize, Sequelize) => {
     },
     phoneNumber: {
       type: Sequelize.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     fullName: {
       type: Sequelize.STRING,
-      allowNull: false,
+      allowNull: true,
     },
   });
 

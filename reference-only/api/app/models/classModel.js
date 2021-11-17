@@ -6,11 +6,11 @@ module.exports = (sequelize, Sequelize) => {
     },
     numberOfStudent: {
       type: Sequelize.INTEGER,
-      allowNull: false,
+      allowNull: true,
     },
     banner: {
       type: Sequelize.STRING,
-      allowNull: false,
+      allowNull: true,
     },
   });
 
