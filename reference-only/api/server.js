@@ -1,8 +1,9 @@
 const express = require("express");
 const cors = require("cors");
 
+require("dotenv").config();
 const app = express();
-
+const passport = require('./app/auth/login');
 const db = require("./app/models");
 db.sequelize.sync();
 
@@ -29,6 +30,9 @@ app.get("/", (req, res) => {
   res.json({ message: "Welcome to bezkoder application." });
 });
 
+app.use(passport.initialize());
+
+require("./app/auth/login/loginRouter")(app);
 require("./app/routes/userRoute")(app);
 require("./app/routes/classRoute")(app);
 require("./app/routes/addUserToClassRoute")(app);
