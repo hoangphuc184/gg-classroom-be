@@ -23,6 +23,10 @@ exports.findAll = async () => {
   });
 };
 
+exports.update = async (id, body) => {
+  return await User.update(body, { where: { id: id } });
+};
+
 exports.findForLogin = async (obj) => {
   return await User.findOne({
     where: {
