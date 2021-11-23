@@ -2,7 +2,7 @@ const db = require("../models");
 const Assignment = db.assignments;
 const Class = db.classes;
 
-exports.createAssignment = (infor) => {
+exports.createAssignment = async (infor) => {
   return new Promise(async (resolve, reject) => {
     try {
       if (
@@ -39,7 +39,7 @@ exports.createAssignment = (infor) => {
   });
 };
 
-exports.findAllAssignmentWithClassId = (c_id) => {
+exports.findAllAssignmentWithClassId = async (c_id) => {
   return new Promise(async (resolve, reject) => {
     try {
       if (!c_id) {
@@ -56,6 +56,38 @@ exports.findAllAssignmentWithClassId = (c_id) => {
         resolve({
           errCode: 0,
           data: assignments,
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+exports.deleteAssignmentOfClass = async (id, c_id) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let assignment = Assignment.findOne({
+        where: {
+          id: id,
+          classId: c_id,
+        },
+      });
+      if (!assignment) {
+        resolve({
+          errCode: 1,
+          errMessage: "Assignment does not exist!",
+        });
+      } else {
+        await Assignment.destroy({
+          where: {
+            id: id,
+            classId: c_id,
+          },
+        });
+        resolve({
+          errCode: 0,
+          errMessage: "Assignment is deleted!",
         });
       }
     } catch (e) {
