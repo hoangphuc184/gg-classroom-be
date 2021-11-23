@@ -5,8 +5,8 @@ module.exports = (sequelize, Sequelize) => {
       allowNull: false,
     },
     numberOfStudent: {
-      type: Sequelize.INTEGER,
-      allowNull: true,
+      type: Sequelize.INTEGER.UNSIGNED,
+      allowNull: false,
     },
     banner: {
       type: Sequelize.STRING,
