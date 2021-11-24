@@ -14,6 +14,12 @@ module.exports = (app) => {
     assignment.findAllAssignmentWithClassId
   );
 
+  app.put(
+    "/api/assignments",
+    [authJwt.verifyToken],
+    assignment.updateAssignment
+  );
+
   app.delete(
     "/api/assignments",
     [authJwt.verifyToken, authJwt.isTeacher],
