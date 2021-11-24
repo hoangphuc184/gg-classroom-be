@@ -54,3 +54,18 @@ exports.findById = async (req, res) => {
     console.log(err);
   }
 };
+
+exports.findByUserId = async (req, res) => {
+  try {
+    const id = req.params.u_id;
+
+    const classes = await classService.findByUserId(id);
+    if (classes) {
+      res.status(200).json(classes);
+    } else {
+      res.status(404).json({ message: `No class with id = ${id} was found` });
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
