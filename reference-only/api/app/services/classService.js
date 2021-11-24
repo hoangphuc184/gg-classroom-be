@@ -57,9 +57,10 @@ exports.findById = async (id) => {
 exports.findByUserId = async (u_id) => {
   return await Class.findAll({
     attributes: ["id", "className"],
-    join: [
+    include: [
       {
         model: User,
+        attributes: ["id", "username"],
         where: {
           id: u_id,
         },

@@ -8,13 +8,17 @@ module.exports = (app) => {
     classes.create
   );
 
-  app.get("/api/classes", [authJwt.verifyToken], classes.findAll);
+  app.get("/api/classes", 
+  // [authJwt.verifyToken], 
+  classes.findAll);
 
-  app.get("/api/classes/:id", [authJwt.verifyToken], classes.findById);
+  app.get("/api/classes/:id", 
+  // [authJwt.verifyToken], 
+  classes.findById);
 
   app.get(
     "/api/classes/user/:u_id",
-    [authJwt.verifyToken],
+    // [authJwt.verifyToken],
     classes.findByUserId
   );
 };

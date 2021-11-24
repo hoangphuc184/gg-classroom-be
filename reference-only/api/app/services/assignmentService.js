@@ -28,9 +28,9 @@ exports.createAssignment = async (infor) => {
               instruction: infor.instruction,
               point: infor.point,
               dueDate: infor.dueDate,
-            }).then((assignment) => {
+            }).then(async (assignment) => {
               if (infor.classId) {
-                Class.findByPk(infor.classId).then((clss) => {
+                await Class.findByPk(infor.classId).then((clss) => {
                   if (cls) {
                     assignment.setClass(clss);
                     resolve({

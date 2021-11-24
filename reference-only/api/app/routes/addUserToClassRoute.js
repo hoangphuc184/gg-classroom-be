@@ -6,14 +6,14 @@ module.exports = (app) => {
 
   app.post(
     "/api/addUser",
-    [authJwt.verifyToken, authJwt.isTeacher],
+    // [authJwt.verifyToken, authJwt.isTeacher],
     addUser.addUser
   );
   // router.post("/", addUser.addUser);
 
   app.post(
     "/api/addUser/join",
-    [authJwt.verifyToken, authJwt.isTeacher],
+    // [authJwt.verifyToken, authJwt.isTeacher],
     addUser.joinClass
   );
   // router.post("/join", addUser.joinClass);
