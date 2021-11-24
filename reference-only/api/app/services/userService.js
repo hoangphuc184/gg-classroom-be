@@ -1,6 +1,7 @@
 const db = require("../models");
 const User = db.users;
 const Class = db.classes;
+const Role = db.roles;
 
 exports.create = async (user) => {
   // Save User in the database
@@ -20,6 +21,31 @@ exports.findAll = async () => {
         },
       },
     ],
+  });
+};
+
+exports.findAllTeacherOfClass = async () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let teachers = await User.findAll({
+        attributes: ["id", "username"],
+        include: [
+          {
+            model: Role,
+            where: {
+              name: "teacher",
+            },
+          },
+          { model: Class },
+        ],
+        raw: true,
+        nest: true,
+      });
+      console.log(teachers);
+      resolve(teachers);
+    } catch (e) {
+      reject(e);
+    }
   });
 };
 

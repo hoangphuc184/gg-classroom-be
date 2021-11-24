@@ -3,7 +3,7 @@ exports.update = async (req, res) => {
   try {
     const User = await userService.update(req.params.id, req.body);
     if (User) {
-      res.status(200).json({message: "User updated"});
+      res.status(200).json({ message: "User updated" });
     } else {
       res.status(404).json({ message: "Error updating user" });
     }
@@ -22,6 +22,19 @@ exports.findAll = async (req, res) => {
     }
   } catch (err) {
     console.log(err);
+  }
+};
+
+exports.findAllTeacherOfClass = async (req, res) => {
+  try {
+    let teachers = await userService.findAllTeacherOfClass();
+    res.status(200).json(teachers);
+  } catch (e) {
+    console.log(e);
+    res.status(200).json({
+      errCode: -1,
+      errMessage: "Error from the server",
+    });
   }
 };
 
