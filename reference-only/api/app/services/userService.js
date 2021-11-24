@@ -24,25 +24,84 @@ exports.findAll = async () => {
   });
 };
 
-exports.findAllTeacherOfClass = async () => {
+exports.findAllTeacherOfClass = async (c_id) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let teachers = await User.findAll({
-        attributes: ["id", "username"],
-        include: [
-          {
-            model: Role,
-            where: {
-              name: "teacher",
+      let cls = await Class.findByPk(c_id);
+      if (!cls) {
+        resolve({
+          errCode: 1,
+          errMessage: "Class does not exist",
+        });
+      } else {
+        let teachers = await User.findAll({
+          attributes: ["id", "username"],
+          include: [
+            {
+              model: Role,
+              where: {
+                name: "teacher",
+              },
             },
-          },
-          { model: Class },
-        ],
-        raw: true,
-        nest: true,
-      });
-      console.log(teachers);
-      resolve(teachers);
+            {
+              model: Class,
+              attributes: ["id", "className"],
+              where: {
+                id: c_id,
+              },
+            },
+          ],
+          raw: true,
+          nest: true,
+        });
+        console.log(teachers);
+        resolve({
+          errCode: 0,
+          data: teachers,
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+exports.findAllStudentOfClass = async (c_id) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let cls = await Class.findByPk(c_id);
+      if (!cls) {
+        resolve({
+          errCode: 1,
+          errMessage: "Class does not exist",
+        });
+      } else {
+        let teachers = await User.findAll({
+          attributes: ["id", "username"],
+          include: [
+            {
+              model: Role,
+              where: {
+                name: "student",
+              },
+            },
+            {
+              model: Class,
+              attributes: ["id", "className"],
+              where: {
+                id: c_id,
+              },
+            },
+          ],
+          raw: true,
+          nest: true,
+        });
+        console.log(teachers);
+        resolve({
+          errCode: 0,
+          data: teachers,
+        });
+      }
     } catch (e) {
       reject(e);
     }

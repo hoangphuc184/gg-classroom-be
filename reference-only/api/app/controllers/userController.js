@@ -27,8 +27,21 @@ exports.findAll = async (req, res) => {
 
 exports.findAllTeacherOfClass = async (req, res) => {
   try {
-    let teachers = await userService.findAllTeacherOfClass();
+    let teachers = await userService.findAllTeacherOfClass(req.query.c_id);
     res.status(200).json(teachers);
+  } catch (e) {
+    console.log(e);
+    res.status(200).json({
+      errCode: -1,
+      errMessage: "Error from the server",
+    });
+  }
+};
+
+exports.findAllStudentOfClass = async (req, res) => {
+  try {
+    let students = await userService.findAllStudentOfClass(req.query.c_id);
+    res.status(200).json(students);
   } catch (e) {
     console.log(e);
     res.status(200).json({
