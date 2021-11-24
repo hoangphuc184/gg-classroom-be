@@ -50,7 +50,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // simple route
 app.get("/", (req, res) => {
-  res.json({ message: "Welcome to bezkoder application." });
+  res.json({ message: "Google Classroom API of Phuc, Tu, Tuan Anh" });
 });
 
 require("./app/routes/authRoutes")(app);
