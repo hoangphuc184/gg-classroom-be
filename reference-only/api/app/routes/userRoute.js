@@ -7,4 +7,6 @@ module.exports = (app) => {
   app.get("/api/users/:id", [authJwt.verifyToken, authJwt.isTecherOrAdmin], users.findById);
 
   app.put("/api/users/:id", [authJwt.verifyToken], users.update);
+  
+  app.get("/api/teacher", users.findAllTeacherOfClass);
 };

@@ -14,7 +14,7 @@ module.exports = (app) => {
     assignment.findAllAssignmentWithClassId
   );
 
-  app.put(
+  app.delete(
     "/api/assignments",
     [authJwt.verifyToken, authJwt.isTeacher],
     assignment.deleteAssignmentOfClass
