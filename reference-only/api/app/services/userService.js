@@ -11,10 +11,10 @@ exports.create = async (user) => {
 
 exports.findAll = async () => {
   return await User.findAll({
+    attributes: ["id", "studentID", "fullName", "DOB", "email", "phoneNumber"],
     include: [
       {
         model: Class,
-        as: "classes",
         attributes: ["id", "className"],
         through: {
           attributes: [],
@@ -39,15 +39,22 @@ exports.findAllTeacherOfClass = async (c_id) => {
           include: [
             {
               model: Role,
+              attributes: ["name"],
               where: {
                 name: "teacher",
+              },
+              through: {
+                attributes: [],
               },
             },
             {
               model: Class,
-              attributes: ["id", "className"],
+              attributes: [],
               where: {
                 id: c_id,
+              },
+              through: {
+                attributes: [],
               },
             },
           ],
@@ -76,30 +83,37 @@ exports.findAllStudentOfClass = async (c_id) => {
           errMessage: "Class does not exist",
         });
       } else {
-        let teachers = await User.findAll({
+        let students = await User.findAll({
           attributes: ["id", "username"],
           include: [
             {
               model: Role,
+              attributes: ["name"],
               where: {
                 name: "student",
+              },
+              through: {
+                attributes: [],
               },
             },
             {
               model: Class,
-              attributes: ["id", "className"],
+              attributes: [],
               where: {
                 id: c_id,
+              },
+              through: {
+                attributes: [],
               },
             },
           ],
           raw: true,
           nest: true,
         });
-        console.log(teachers);
+        console.log(students);
         resolve({
           errCode: 0,
-          data: teachers,
+          data: students,
         });
       }
     } catch (e) {
@@ -121,17 +135,36 @@ exports.findForLogin = async (obj) => {
   });
 };
 
-exports.findById = async (id) => {
-  return await User.findByPk(id, {
-    include: [
-      {
-        model: Class,
-        as: "classes",
-        attributes: ["id", "className"],
-        through: {
-          attributes: [],
-        },
-      },
-    ],
+exports.findForProfile = async (userId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!userId) {
+        resolve({
+          errCode: 1,
+          errMessage: "Missing user ID",
+        });
+      } else {
+        let user = await User.findOne({
+          attributes: [
+            "id",
+            "studentID",
+            "fullName",
+            "DOB",
+            "email",
+            "phoneNumber",
+          ],
+          where: {
+            id: userId,
+          },
+          raw: true,
+        });
+        resolve({
+          errCode: 0,
+          data: user,
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
   });
 };

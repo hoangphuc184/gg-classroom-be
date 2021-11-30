@@ -11,17 +11,12 @@ const db = require("./app/models");
 // function initial() {
 //   Role.create({
 //     id: 1,
-//     name: "student"
+//     name: "student",
 //   });
- 
+
 //   Role.create({
 //     id: 2,
-//     name: "teacher"
-//   });
- 
-//   Role.create({
-//     id: 3,
-//     name: "admin"
+//     name: "teacher",
 //   });
 // }
 
@@ -32,7 +27,6 @@ const db = require("./app/models");
 
 // - For production, just use sync() function to sync the database and avoid dropping data, role will need to be initialized mannually through query in database
 db.sequelize.sync();
-
 
 const corsOptions = {
   origin: "*",

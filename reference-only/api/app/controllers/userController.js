@@ -31,7 +31,7 @@ exports.findAllTeacherOfClass = async (req, res) => {
     res.status(200).json(teachers);
   } catch (e) {
     console.log(e);
-    res.status(200).json({
+    res.status(500).json({
       errCode: -1,
       errMessage: "Error from the server",
     });
@@ -44,24 +44,22 @@ exports.findAllStudentOfClass = async (req, res) => {
     res.status(200).json(students);
   } catch (e) {
     console.log(e);
-    res.status(200).json({
+    res.status(500).json({
       errCode: -1,
       errMessage: "Error from the server",
     });
   }
 };
 
-exports.findById = async (req, res) => {
+exports.findForProfile = async (req,res) => {
   try {
-    const id = req.params.id;
-
-    const users = await userService.findById(id);
-    if (users) {
-      res.status(200).json(users);
-    } else {
-      res.status(404).json({ message: `No user with id = ${id} was found` });
-    }
-  } catch (err) {
-    console.log(err);
+    let user = await userService.findForProfile(req.params.userId)
+    res.status(200).json(user);
+  } catch (e) {
+    console(e);
+    res.status(500).json({
+      errCode: -1,
+      errMessage: "Error from the server"
+    })
   }
-};
+}
