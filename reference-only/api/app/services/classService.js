@@ -6,36 +6,42 @@ exports.create = async (classroom) => {
   // Save Class in the database
   return new Promise(async (resolve, reject) => {
     try {
-      if (!classroom.className || !classroom.numberOfStudent || ! classroom.banner || !classroom.teacherId) {
+      if (
+        !classroom.className ||
+        !classroom.numberOfStudent ||
+        !classroom.banner ||
+        !classroom.teacherId
+      ) {
         resolve({
           errCode: 1,
-          errMessage: "Missing required params to create class"
-        })
+          errMessage: "Missing required params to create class",
+        });
       }
       let teacher = await User.findOne({
         where: {
           id: classroom.teacherId,
-        }
-      })
+        },
+      });
       let createdClass = await Class.create({
         className: classroom.className,
         numberOfStudent: classroom.numberOfStudent,
         banner: classroom.banner,
-        teacherName: teacher.fullName
-      })
+        teacherName: teacher.fullName,
+      });
       createdClass.addUser(teacher);
       resolve({
         errCode: 0,
-        data: createdClass
-      })
+        data: createdClass,
+      });
     } catch (e) {
       reject(e);
     }
-  })
+  });
 };
 
 exports.findAll = async () => {
   return await Class.findAll({
+    attributes: ["id", "className", "teacherName", "numberOfStudent", "banner"],
     include: [
       {
         model: User,
@@ -45,9 +51,6 @@ exports.findAll = async () => {
           "studentID",
           "username",
           "fullName",
-          "DOB",
-          "email",
-          "phoneNumber",
         ],
         through: {
           attributes: [],
@@ -59,18 +62,16 @@ exports.findAll = async () => {
 
 exports.findById = async (id) => {
   return await Class.findByPk(id, {
+    attributes: ["id", "className", "teacherName", "numberOfStudent", "banner"],
     include: [
       {
         model: User,
         as: "users",
         attributes: [
           "id",
-          "studentID",
           "username",
+          "studentID",
           "fullName",
-          "DOB",
-          "email",
-          "phoneNumber",
         ],
         through: {
           attributes: [],
@@ -86,9 +87,12 @@ exports.findByUserId = async (u_id) => {
     include: [
       {
         model: User,
-        attributes: ["id", "username"],
+        attributes: [],
         where: {
           id: u_id,
+        },
+        through: {
+          attributes: [],
         },
       },
     ],
