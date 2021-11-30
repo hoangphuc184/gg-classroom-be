@@ -25,30 +25,30 @@ db.roles = require("./roleModel.js")(sequelize, Sequelize);
 db.assignments = require("./assignmentModel.js")(sequelize, Sequelize);
 
 db.users.belongsToMany(db.classes, {
-  through: "users_classes",
-  foreignKey: "user_id",
-  otherKey: "class_id",
+  through: "ClassUser",
+  foreignKey: "userId",
+  otherKey: "classId",
 });
 db.classes.belongsToMany(db.users, {
-  through: "users_classes",
-  foreignKey: "class_id",
-  otherKey: "user_id",
+  through: "ClassUser",
+  foreignKey: "classId",
+  otherKey: "userId",
 });
 
 db.roles.belongsToMany(db.users, {
   through: "user_roles",
   foreignKey: "role_id",
-  otherKey: "user_id"
+  otherKey: "user_id",
 });
 db.users.belongsToMany(db.roles, {
   through: "user_roles",
   foreignKey: "user_id",
-  otherKey: "role_id"
+  otherKey: "role_id",
 });
 
-db.classes.hasMany(db.assignments, {onDelete: 'CASCADE'});
-db.assignments.belongsTo(db.classes, {onDelete: 'CASCADE'});
+db.classes.hasMany(db.assignments, { onDelete: "CASCADE" });
+db.assignments.belongsTo(db.classes, { onDelete: "CASCADE" });
 
-db.ROLES = ["student", "teacher", "admin"];
+db.ROLES = ["student", "teacher"];
 
 module.exports = db;

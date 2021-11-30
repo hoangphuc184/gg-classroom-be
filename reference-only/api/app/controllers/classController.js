@@ -1,29 +1,21 @@
 const classService = require("../services/classService");
+const userService = require("../services/userService")
 exports.create = async (req, res) => {
-  // Validate request
-  if (!req.body.className || !req.body.numberOfStudent || !req.body.banner) {
-    res.status(400).send({
-      message: "Content can not be empty!",
-    });
-    return;
-  }
-
-  // Create a class
-
   try {
     const Class = {
       className: req.body.className,
       numberOfStudent: req.body.numberOfStudent,
       banner: req.body.banner,
+      teacherId: req.userId,
     };
     const classRes = await classService.create(Class);
-    if (classRes.dataValues.id) {
-      res.status(200).json({ message: "Class created!" });
-    } else {
-      res.status(404).json({ message: "Error!" });
-    }
-  } catch (err) {
-    console.log(err);
+    res.status(200).json(classRes);
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({
+      errCode: -1,
+      errMessage: "Error from the server"
+    })
   }
 };
 

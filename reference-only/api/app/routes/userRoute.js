@@ -9,9 +9,9 @@ module.exports = (app) => {
   );
 
   app.get(
-    "/api/users/:id",
+    "/api/users/:userId",
     // [authJwt.verifyToken, authJwt.isTecherOrAdmin],
-    users.findById
+    users.findForProfile
   );
 
   app.put("/api/users/:id", 
