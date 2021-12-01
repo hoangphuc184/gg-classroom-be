@@ -1,6 +1,8 @@
 const db = require("../models");
 const Class = db.classes;
 const User = db.users;
+const UploadUser = db.uploadusers;
+const readXlsxFile = require("read-excel-file/node");
 
 exports.create = async (classroom) => {
   // Save Class in the database
@@ -108,6 +110,102 @@ exports.findByUserId = async (u_id) => {
           data: joinedClass,
         });
       }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+exports.uploadStudentList = async (file, c_id) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!file || !c_id) {
+        resolve({
+          errCode: 1,
+          errMessage: "Missing params",
+        });
+      }
+      const curClass = await Class.findOne({ where: { id: c_id } });
+      if (!curClass) {
+        resolve({
+          errCode: 2,
+          errMessage: "Class does not exist",
+        });
+      }
+      let path = __basedir + "/app/resources/uploads/" + file.filename;
+      readXlsxFile(path).then((rows) => {
+        // skip header
+        rows.shift();
+
+        let studentList = [];
+
+        rows.forEach((row) => {
+          let Student = {
+            id: row[0],
+            studentID: row[1],
+            fullName: row[2],
+            accountLinkTo: row[3],
+            classId: curClass.id,
+          };
+
+          studentList.push(Student);
+        });
+
+        UploadUser.bulkCreate(studentList)
+          .then(() => {
+            resolve({
+              errCode: 0,
+              errMessage: "Upload the file successfully: " + file.originalname,
+            });
+          })
+          .catch((e) => {
+            resolve({
+              errCode: 3,
+              errMessage: "Failed to import data! Error: " + e.message,
+            });
+          });
+      });
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+exports.GetListStudentAndMappingID = async (c_id) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!c_id) {
+        resolve({
+          errCode: 1,
+          errMessage: "Missing params",
+        });
+      }
+      let studentList = await UploadUser.findAll({
+        attributes: ["id", "studentID", "fullName", "accountLinkTo", "classId"],
+        include: [
+          {
+            model: Class,
+            attributes: [],
+            where: {
+              id: c_id,
+            },
+          },
+        ],
+        raw: true,
+      });
+      studentList.forEach(async (student) => {
+        const stu = await User.findOne({
+          where: { studentID: student.studentID },
+        });
+        if (stu) {
+          student.accountLinkTo = stu.email;
+        }
+      });
+      console.log(studentList);
+      resolve({
+        errCode: 0,
+        data: studentList,
+      });
     } catch (e) {
       reject(e);
     }
