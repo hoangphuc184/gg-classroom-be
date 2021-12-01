@@ -58,3 +58,18 @@ exports.updateAssignment = async (req, res) => {
     });
   }
 };
+
+exports.GetGradeOfAssignment = async (req, res) => {
+  try {
+    const gradeList = await assignmentService.GetGradeOfAssignment(
+      req.params.id
+    );
+    res.status(200).json(gradeList);
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({
+      errCode: -1,
+      errMessage: "Error from the server",
+    });
+  }
+};

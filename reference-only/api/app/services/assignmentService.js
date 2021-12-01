@@ -1,6 +1,7 @@
 const db = require("../models");
 const Assignment = db.assignments;
 const Class = db.classes;
+const Grade = db.grades;
 
 exports.createAssignment = async (infor) => {
   return new Promise(async (resolve, reject) => {
@@ -133,6 +134,37 @@ exports.updateAssignment = (c_id, infor) => {
           });
         });
       }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+exports.GetGradeOfAssignment = async (a_id) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!a_id) {
+        resolve({
+          errCode: 1,
+          errMessage: "Missing params",
+        });
+      }
+      let gradeList = await Grade.findAll({
+        include: [
+          {
+            model: Assignment,
+            attributes: [],
+            where: {
+              id: a_id,
+            },
+          },
+        ],
+        raw: true,
+      });
+      resolve({
+        errCode: 0,
+        data: gradeList,
+      });
     } catch (e) {
       reject(e);
     }

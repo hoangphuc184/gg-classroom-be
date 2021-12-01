@@ -27,6 +27,7 @@ global.__basedir = __dirname;
 
 // - For production, just use sync() function to sync the database and avoid dropping data, role will need to be initialized mannually through query in database
 db.sequelize.sync();
+// db.sequelize.sync({ alter: true });
 
 const corsOptions = {
   origin: "*",
