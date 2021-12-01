@@ -51,6 +51,12 @@ db.users.belongsToMany(db.roles, {
 db.classes.hasMany(db.assignments, { onDelete: "CASCADE" });
 db.assignments.belongsTo(db.classes, { onDelete: "CASCADE" });
 
+db.classes.hasOne(db.uploadusers, { onDelete: "CASCADE" });
+db.uploadusers.belongsTo(db.classes, { onDelete: "CASCADE" });
+
+db.assignments.hasOne(db.grades, { onDelete: "CASCADE" });
+db.grades.belongsTo(db.assignments, { onDelete: "CASCADE" });
+
 db.ROLES = ["student", "teacher"];
 
 module.exports = db;

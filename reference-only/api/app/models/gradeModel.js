@@ -4,11 +4,7 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.FLOAT,
       allowNull: false,
     },
-    assignment_id: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-    },
-    student_id: {
+    studentId: {
       type: Sequelize.INTEGER,
       allowNull: false,
     },
