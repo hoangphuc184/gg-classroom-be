@@ -25,4 +25,6 @@ module.exports = (app) => {
     // [authJwt.verifyToken, authJwt.isTeacher],
     assignment.deleteAssignmentOfClass
   );
+
+  app.get("/api/assignments/:id/grades", assignment.GetGradeOfAssignment);
 };
