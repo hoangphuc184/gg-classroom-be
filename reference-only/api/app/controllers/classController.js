@@ -1,5 +1,6 @@
 const classService = require("../services/classService");
 const userService = require("../services/userService");
+
 exports.create = async (req, res) => {
   try {
     const Class = {
@@ -55,6 +56,35 @@ exports.findByUserId = async (req, res) => {
     res.status(200).json(classes);
   } catch (err) {
     console.log(err);
+    res.status(500).json({
+      errCode: -1,
+      errMessage: "Error from the server",
+    });
+  }
+};
+
+exports.uploadStudentList = async (req, res) => {
+  try {
+    if (req.file == undefined) {
+      return res.status(400).send("Please upload an excel file!");
+    }
+    let result = await classService.uploadStudentList(req.file, req.params.id);
+    res.status(200).json(result);
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({
+      errCode: -1,
+      errMessage: "Error from the server",
+    });
+  }
+};
+
+exports.GetListStudentAndMappingID = async (req, res) => {
+  try {
+    let listStu = await classService.GetListStudentAndMappingID(req.params.id);
+    res.status(200).json(listStu);
+  } catch (e) {
+    console.log(e);
     res.status(500).json({
       errCode: -1,
       errMessage: "Error from the server",

@@ -1,6 +1,7 @@
 module.exports = (app) => {
   const classes = require("../controllers/classController");
   const { authJwt } = require("../middlewares");
+  const upload = require("../middlewares/upload");
 
   app.post(
     "/api/classes",
@@ -21,4 +22,8 @@ module.exports = (app) => {
     // [authJwt.verifyToken],
     classes.findByUserId
   );
+
+  app.get("/api/classes/:id/students", classes.GetListStudentAndMappingID);
+
+  app.post("/api/classes/:id/students/upload", upload.single("file"), classes.uploadStudentList);
 };
