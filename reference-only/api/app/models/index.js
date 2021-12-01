@@ -24,6 +24,7 @@ db.classes = require("./classModel.js")(sequelize, Sequelize);
 db.roles = require("./roleModel.js")(sequelize, Sequelize);
 db.assignments = require("./assignmentModel.js")(sequelize, Sequelize);
 db.grades = require("./gradeModel")(sequelize, Sequelize);
+db.uploadusers = require("./uploadUser")(sequelize, Sequelize);
 
 db.users.belongsToMany(db.classes, {
   through: "ClassUser",

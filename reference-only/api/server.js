@@ -3,7 +3,7 @@ const cors = require("cors");
 
 const app = express();
 const db = require("./app/models");
-
+global.__basedir = __dirname;
 // - For development purpose, use these lines of code to drop table and re-sync database, then call function initial() to initialize role
 
 // const Role = db.roles;
