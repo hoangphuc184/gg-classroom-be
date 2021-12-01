@@ -1,5 +1,5 @@
 const classService = require("../services/classService");
-const userService = require("../services/userService")
+const userService = require("../services/userService");
 exports.create = async (req, res) => {
   try {
     const Class = {
@@ -14,8 +14,8 @@ exports.create = async (req, res) => {
     console.log(e);
     res.status(500).json({
       errCode: -1,
-      errMessage: "Error from the server"
-    })
+      errMessage: "Error from the server",
+    });
   }
 };
 
@@ -52,12 +52,12 @@ exports.findByUserId = async (req, res) => {
     const id = req.params.u_id;
 
     const classes = await classService.findByUserId(id);
-    if (classes) {
-      res.status(200).json(classes);
-    } else {
-      res.status(404).json({ message: `No class with id = ${id} was found` });
-    }
+    res.status(200).json(classes);
   } catch (err) {
     console.log(err);
+    res.status(500).json({
+      errCode: -1,
+      errMessage: "Error from the server",
+    });
   }
 };
