@@ -14,15 +14,27 @@ module.exports = (app) => {
     users.findForProfile
   );
 
-  app.put("/api/users/:id", 
-  // [authJwt.verifyToken], 
-  users.update);
+  app.put(
+    "/api/users/:id",
+    // [authJwt.verifyToken],
+    users.update
+  );
 
-  app.get("/api/teacher", 
-  // [authJwt.verifyToken], 
-  users.findAllTeacherOfClass);
+  app.get(
+    "/api/teacher",
+    // [authJwt.verifyToken],
+    users.findAllTeacherOfClass
+  );
 
-  app.get("/api/student", 
-  // [authJwt.verifyToken], 
-  users.findAllStudentOfClass);
+  app.get(
+    "/api/student",
+    // [authJwt.verifyToken],
+    users.findAllStudentOfClass
+  );
+
+  app.get(
+    "/api/download/student",
+    // [authJwt.verifyToken],
+    users.downloadAllStudentOfClass
+  );
 };
