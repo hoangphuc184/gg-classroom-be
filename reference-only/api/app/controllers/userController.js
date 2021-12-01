@@ -15,7 +15,6 @@ exports.upload = async (req, res) => {
     }
 
     let path = __basedir + "/app/resources/uploads/" + req.file.filename;
-    console.log("Hreeeeeeeeeeeee");
     readXlsxFile(path).then((rows) => {
       // skip header
       rows.shift();
@@ -25,8 +24,9 @@ exports.upload = async (req, res) => {
       rows.forEach((row) => {
         let std = {
           id: row[0],
-          fullName: row[1],
-          accountLinkTo: row[2],
+          studentID: row[1],
+          fullName: row[2],
+          accountLinkTo: row[3],
         };
 
         students.push(std);
