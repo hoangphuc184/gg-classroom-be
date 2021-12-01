@@ -3,6 +3,52 @@ const db = require("../models");
 const excel = require("exceljs");
 const User = db.users;
 const Grade = db.grades;
+const readXlsxFile = require("read-excel-file/node");
+const upload = require("../middlewares/upload");
+exports.upload = async (req, res) => {
+  try {
+    if (req.file == undefined) {
+      return res.status(400).send("Please upload an excel file!");
+    }
+
+    let path = __basedir + "/app/resources/uploads/" + req.file.filename;
+    readXlsxFile(path).then((rows) => {
+      // skip header
+      rows.shift();
+
+      let grades = [];
+
+      rows.forEach((row) => {
+        let grade = {
+          grade: row[0],
+          studentId: row[1],
+          assignmentId: req.query.assignment_id,
+        };
+
+        grades.push(grade);
+      });
+
+      Grade.bulkCreate(grades)
+        .then(() => {
+          res.status(200).send({
+            message: "Uploaded the file successfully: " + req.file.originalname,
+          });
+        })
+        .catch((error) => {
+          res.status(500).send({
+            message: "Fail to import data into database!",
+            error: error.message,
+          });
+        });
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      message: "Could not upload the file: " + req.file.originalname,
+    });
+  }
+};
+
 exports.create = async (req, res) => {
   try {
     const grade = {
