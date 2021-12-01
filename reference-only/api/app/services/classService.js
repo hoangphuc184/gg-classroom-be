@@ -46,12 +46,7 @@ exports.findAll = async () => {
       {
         model: User,
         as: "users",
-        attributes: [
-          "id",
-          "studentID",
-          "username",
-          "fullName",
-        ],
+        attributes: ["id", "studentID", "username", "fullName"],
         through: {
           attributes: [],
         },
@@ -67,12 +62,7 @@ exports.findById = async (id) => {
       {
         model: User,
         as: "users",
-        attributes: [
-          "id",
-          "username",
-          "studentID",
-          "fullName",
-        ],
+        attributes: ["id", "username", "studentID", "fullName"],
         through: {
           attributes: [],
         },
@@ -82,21 +72,44 @@ exports.findById = async (id) => {
 };
 
 exports.findByUserId = async (u_id) => {
-  return await Class.findAll({
-    attributes: ["id", "className"],
-    include: [
-      {
-        model: User,
-        attributes: [],
-        where: {
-          id: u_id,
-        },
-        through: {
-          attributes: [],
-        },
-      },
-    ],
-    raw: true,
-    nest: true,
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!u_id) {
+        resolve({
+          errCode: 1,
+          errMessage: "Missing user ID to find joined class",
+        });
+      } else {
+        let joinedClass = await Class.findAll({
+          attributes: [
+            "id",
+            "className",
+            "numberOfStudent",
+            "teacherName",
+            "banner",
+          ],
+          include: [
+            {
+              model: User,
+              attributes: [],
+              where: {
+                id: u_id,
+              },
+              through: {
+                attributes: [],
+              },
+            },
+          ],
+          raw: true,
+          nest: true,
+        });
+        resolve({
+          errCode: 0,
+          data: joinedClass,
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
   });
 };
