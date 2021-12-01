@@ -1,7 +1,7 @@
 module.exports = (app) => {
   const users = require("../controllers/userController.js");
   const { authJwt } = require("../middlewares");
-
+  const upload = require("../middlewares/upload");
   app.get(
     "/api/users",
     // [authJwt.verifyToken, authJwt.isTecherOrAdmin],
@@ -37,4 +37,5 @@ module.exports = (app) => {
     // [authJwt.verifyToken],
     users.downloadAllStudentOfClass
   );
+  app.post("/api/upload/student", upload.single("file"), users.upload);
 };

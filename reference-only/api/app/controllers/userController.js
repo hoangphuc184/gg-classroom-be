@@ -3,8 +3,56 @@ const db = require("../models");
 const User = db.users;
 const Class = db.classes;
 const Role = db.roles;
-
+const UploadUser = db.uploadusers;
 const excel = require("exceljs");
+
+const readXlsxFile = require("read-excel-file/node");
+
+exports.upload = async (req, res) => {
+  try {
+    if (req.file == undefined) {
+      return res.status(400).send("Please upload an excel file!");
+    }
+
+    let path = __basedir + "/app/resources/uploads/" + req.file.filename;
+    console.log("Hreeeeeeeeeeeee");
+    readXlsxFile(path).then((rows) => {
+      // skip header
+      rows.shift();
+
+      let students = [];
+
+      rows.forEach((row) => {
+        let std = {
+          id: row[0],
+          fullName: row[1],
+          accountLinkTo: row[2],
+        };
+
+        students.push(std);
+      });
+
+      UploadUser.bulkCreate(students)
+        .then(() => {
+          res.status(200).send({
+            message: "Uploaded the file successfully: " + req.file.originalname,
+          });
+        })
+        .catch((error) => {
+          res.status(500).send({
+            message: "Fail to import data into database!",
+            error: error.message,
+          });
+        });
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      message: "Could not upload the file: " + req.file.originalname,
+    });
+  }
+};
+
 exports.update = async (req, res) => {
   try {
     const Users = await userService.update(req.params.id, req.body);
