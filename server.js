@@ -6,19 +6,19 @@ const db = require("./app/models");
 global.__basedir = __dirname;
 // - For development purpose, use these lines of code to drop table and re-sync database, then call function initial() to initialize role
 
-// const Role = db.roles;
+const Role = db.roles;
 
-// function initial() {
-//   Role.create({
-//     id: 1,
-//     name: "student",
-//   });
+function initial() {
+  Role.create({
+    id: 1,
+    name: "student",
+  });
 
-//   Role.create({
-//     id: 2,
-//     name: "teacher",
-//   });
-// }
+  Role.create({
+    id: 2,
+    name: "teacher",
+  });
+}
 
 // db.sequelize.sync({ force: true }).then(() => {
 //   console.log("Drop and re-sync db.");

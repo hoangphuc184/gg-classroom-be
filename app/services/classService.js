@@ -177,7 +177,7 @@ exports.GetListStudentAndMappingID = async (c_id) => {
       if (!c_id) {
         resolve({
           errCode: 1,
-          errMessage: "Missing params",
+          errMessage: "Missing class id",
         });
       }
       let studentList = await UploadUser.findAll({
@@ -193,15 +193,15 @@ exports.GetListStudentAndMappingID = async (c_id) => {
         ],
         raw: true,
       });
-      studentList.forEach(async (student) => {
-        const stu = await User.findOne({
-          where: { studentID: student.studentID },
+      for (let i = 0; i < studentList.length; i++) {
+        const stud = await User.findOne({
+          where: { studentID: studentList[i].studentID },
+          raw: true,
         });
-        if (stu) {
-          student.accountLinkTo = stu.email;
+        if (stud) {
+          studentList[i].accountLinkTo = stud.email;
         }
-      });
-      console.log(studentList);
+      }
       resolve({
         errCode: 0,
         data: studentList,
