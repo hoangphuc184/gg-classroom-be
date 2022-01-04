@@ -18,6 +18,11 @@ function initial() {
     id: 2,
     name: "teacher",
   });
+
+  Role.create({
+    id: 3,
+    name: "admin",
+  });
 }
 
 // db.sequelize.sync({ force: true }).then(() => {

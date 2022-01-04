@@ -57,6 +57,6 @@ db.uploadusers.belongsTo(db.classes, { onDelete: "CASCADE" });
 db.assignments.hasOne(db.grades, { onDelete: "CASCADE" });
 db.grades.belongsTo(db.assignments, { onDelete: "CASCADE" });
 
-db.ROLES = ["student", "teacher"];
+db.ROLES = ["student", "teacher", "admin"];
 
 module.exports = db;

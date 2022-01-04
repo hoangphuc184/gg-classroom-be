@@ -27,6 +27,22 @@ exports.findAllAssignmentWithClassId = async (req, res) => {
   }
 };
 
+exports.findAssignmentWithClassId = async (req, res) => {
+  try {
+    let assignment = await assignmentService.findAssignmentWithClassId(
+      req.params.id,
+      req.query.c_id
+    );
+    return res.status(200).json(assignment);
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({
+      errCode: -1,
+      errMessage: "Error from the server",
+    });
+  }
+};
+
 exports.deleteAssignmentOfClass = async (req, res) => {
   try {
     let id = req.query.id;
