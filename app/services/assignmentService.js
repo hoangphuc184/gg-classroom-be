@@ -10,7 +10,7 @@ exports.createAssignment = async (infor) => {
         if (!cls) {
           resolve({
             errCode: 1,
-            errMessage: "Class is not found",
+            errMessage: "Class not exist",
           });
         } else {
           if (
@@ -70,6 +70,31 @@ exports.findAllAssignmentWithClassId = async (c_id) => {
           data: assignments,
         });
       }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+exports.findAssignmentWithClassId = async (assignId, c_id) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!assignId | !c_id) {
+        resolve({
+          errCode: -1,
+          errMessage: "Missing assignment id or class id",
+        });
+      }
+      let assignment = await Assignment.findOne({
+        where: {
+          id: assignId,
+          classId: c_id,
+        },
+      });
+      resolve({
+        errCode: 0,
+        data: assignment,
+      });
     } catch (e) {
       reject(e);
     }

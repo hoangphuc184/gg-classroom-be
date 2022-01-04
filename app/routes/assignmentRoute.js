@@ -14,6 +14,8 @@ module.exports = (app) => {
     assignment.findAllAssignmentWithClassId
   );
 
+  app.get("/api/assignments/:id", assignment.findAssignmentWithClassId);
+
   app.put(
     "/api/assignments",
     // [authJwt.verifyToken],
