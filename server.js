@@ -60,6 +60,7 @@ require("./app/routes/classRoute")(app);
 require("./app/routes/addUserToClassRoute")(app);
 require("./app/routes/assignmentRoute")(app);
 require("./app/routes/gradeRoute")(app);
+require("./app/routes/adminRoute")(app);
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {

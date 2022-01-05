@@ -200,6 +200,16 @@ exports.GetListStudentAndMappingID = async (c_id) => {
         });
         if (stud) {
           studentList[i].accountLinkTo = stud.email;
+          await UploadUser.update(
+            {
+              accountLinkTo: stud.email,
+            },
+            {
+              where: {
+                id: studentList[i].id,
+              },
+            }
+          );
         }
       }
       resolve({
