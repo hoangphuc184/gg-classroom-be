@@ -5,8 +5,11 @@ const Role = db.roles;
 
 const Op = db.Sequelize.Op;
 
+const authService = require("../services/authService");
+
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
+const { auth } = require("google-auth-library");
 
 exports.signup = (req, res) => {
   // Save User to Database
@@ -16,17 +19,17 @@ exports.signup = (req, res) => {
     password: bcrypt.hashSync(req.body.password, 8),
     fullName: req.body.fullName,
     DOB: req.body.DOB,
-    phoneNumber: req.body.phoneNumber
+    phoneNumber: req.body.phoneNumber,
   })
-    .then(user => {
+    .then((user) => {
       if (req.body.roles) {
         Role.findAll({
           where: {
             name: {
-              [Op.or]: req.body.roles
-            }
-          }
-        }).then(roles => {
+              [Op.or]: req.body.roles,
+            },
+          },
+        }).then((roles) => {
           user.setRoles(roles).then(() => {
             res.send({ message: "User was registered successfully!" });
           });
@@ -38,7 +41,7 @@ exports.signup = (req, res) => {
         });
       }
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({ message: err.message });
     });
 };
@@ -46,10 +49,10 @@ exports.signup = (req, res) => {
 exports.signin = (req, res) => {
   User.findOne({
     where: {
-      username: req.body.username
-    }
+      username: req.body.username,
+    },
   })
-    .then(user => {
+    .then((user) => {
       if (!user) {
         return res.status(404).send({ message: "User Not found." });
       }
@@ -62,16 +65,16 @@ exports.signin = (req, res) => {
       if (!passwordIsValid) {
         return res.status(401).send({
           accessToken: null,
-          message: "Invalid Password!"
+          message: "Invalid Password!",
         });
       }
 
       var token = jwt.sign({ id: user.id }, config.secret, {
-        expiresIn: 86400 // 24 hours
+        expiresIn: 86400, // 24 hours
       });
 
       var authorities = [];
-      user.getRoles().then(roles => {
+      user.getRoles().then((roles) => {
         for (let i = 0; i < roles.length; i++) {
           authorities.push("ROLE_" + roles[i].name.toUpperCase());
         }
@@ -80,11 +83,42 @@ exports.signin = (req, res) => {
           username: user.username,
           email: user.email,
           roles: authorities,
-          accessToken: token
+          accessToken: token,
         });
       });
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({ message: err.message });
     });
+};
+
+exports.googleSignIn = async (req, res) => {
+  try {
+    let payload = await authService.googleSignIn(req.query.id_token);
+    res.status(200).json(payload);
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({
+      errCode: -1,
+      errMessage: "Error from the server",
+    });
+  }
+};
+
+exports.googleSignUp = async (req, res) => {
+  try {
+    const requiredData = req.body;
+    console.log(requiredData);
+    let payload = await authService.googleSignUp(
+      req.query.id_token,
+      requiredData
+    );
+    res.status(200).json(payload);
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({
+      errCode: -1,
+      errMessage: "Error from the server",
+    });
+  }
 };

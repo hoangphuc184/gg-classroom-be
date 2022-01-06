@@ -35,7 +35,7 @@ exports.findAllTeacherOfClass = async (c_id) => {
         });
       } else {
         let teachers = await User.findAll({
-          attributes: ["id", "username"],
+          attributes: ["id", "username", "fullName"],
           include: [
             {
               model: Role,
@@ -84,7 +84,7 @@ exports.findAllStudentOfClass = async (c_id) => {
         });
       } else {
         let students = await User.findAll({
-          attributes: ["id", "username"],
+          attributes: ["id", "username", "fullName"],
           include: [
             {
               model: Role,
