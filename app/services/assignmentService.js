@@ -51,6 +51,23 @@ exports.createAssignment = async (infor) => {
   });
 };
 
+exports.findAllAssignment = async () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let assignments = await Assignment.findAll({
+        raw: true,
+        order: [["createdAt", "DESC"]],
+      });
+      resolve({
+        errCode: 0,
+        data: assignments,
+      });
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 exports.findAllAssignmentWithClassId = async (c_id) => {
   return new Promise(async (resolve, reject) => {
     try {

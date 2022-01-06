@@ -4,6 +4,10 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.STRING,
       allowNull: false,
     },
+    classCode: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
     teacherName: {
       type: Sequelize.STRING,
       allowNull: false,

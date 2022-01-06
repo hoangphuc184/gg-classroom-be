@@ -12,6 +12,19 @@ exports.createAssignment = async (req, res) => {
   }
 };
 
+exports.findAllAssignment = async (req, res) => {
+  try {
+    let assignments = await assignmentService.findAllAssignment();
+    return res.status(200).json(assignments);
+  } catch (e) {
+    console.log(e);
+    return res.status(200).json({
+      errCode: -1,
+      errMessage: "Error from the server",
+    });
+  }
+};
+
 exports.findAllAssignmentWithClassId = async (req, res) => {
   try {
     let assignments = await assignmentService.findAllAssignmentWithClassId(
@@ -80,10 +93,10 @@ exports.GetGradeOfAssignment = async (req, res) => {
     const gradeList = await assignmentService.GetGradeOfAssignment(
       req.params.id
     );
-    res.status(200).json(gradeList);
+    return res.status(200).json(gradeList);
   } catch (e) {
     console.log(e);
-    res.status(500).json({
+    return res.status(500).json({
       errCode: -1,
       errMessage: "Error from the server",
     });

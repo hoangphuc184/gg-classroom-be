@@ -9,6 +9,12 @@ module.exports = (app) => {
   );
 
   app.get(
+    "/api/assignments/all",
+    [authJwt.verifyToken],
+    assignment.findAllAssignment
+  );
+
+  app.get(
     "/api/assignments",
     // [authJwt.verifyToken],
     assignment.findAllAssignmentWithClassId

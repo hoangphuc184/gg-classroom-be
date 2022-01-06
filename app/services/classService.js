@@ -3,6 +3,7 @@ const Class = db.classes;
 const User = db.users;
 const UploadUser = db.uploadusers;
 const readXlsxFile = require("read-excel-file/node");
+const randomstring = require("randomstring");
 
 exports.create = async (classroom) => {
   // Save Class in the database
@@ -26,6 +27,10 @@ exports.create = async (classroom) => {
       });
       let createdClass = await Class.create({
         className: classroom.className,
+        classCode: randomstring.generate({
+          length: 12,
+          charset: "alphabetic",
+        }),
         numberOfStudent: classroom.numberOfStudent,
         banner: classroom.banner,
         teacherName: teacher.fullName,
