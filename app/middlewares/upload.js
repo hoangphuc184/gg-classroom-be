@@ -3,7 +3,9 @@ const multer = require("multer");
 const excelFilter = (req, file, cb) => {
   if (
     file.mimetype.includes("excel") ||
-    file.mimetype.includes("spreadsheetml")
+    file.mimetype.includes("spreadsheetml") ||
+    file.type.includes("excel") ||
+    file.type.includes("spreadsheetml")
   ) {
     cb(null, true);
   } else {

@@ -1,4 +1,5 @@
 const db = require("../models");
+const validator = require("email-validator");
 const ROLES = db.ROLES;
 const User = db.users;
 
@@ -17,6 +18,12 @@ checkDuplicateUsernameOrEmail = (req, res, next) => {
     }
 
     // Email
+    if (!validator.validate(req.body.email)) {
+      res.status(400).send({
+        message: "Failed! Email contains invalid characters!",
+      });
+      return;
+    }
     User.findOne({
       where: {
         email: req.body.email,

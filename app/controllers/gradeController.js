@@ -49,14 +49,14 @@ exports.upload = async (req, res) => {
   }
 };
 
-exports.create = async (req, res) => {
+exports.createGradeOfAssignment = async (req, res) => {
   try {
-    const grade = {
+    const inputGrade = {
       grade: req.body.grade,
-      assignment_id: req.body.assignment_id,
-      student_id: req.body.student_id,
+      assignmentId: req.body.assignmentId,
+      studentId: req.body.studentId,
     };
-    const gradeRes = await gradeService.create(grade);
+    const gradeRes = await gradeService.createGradeOfAssignment(inputGrade);
     res.status(200).json(gradeRes);
   } catch (e) {
     console.log(e);

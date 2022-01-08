@@ -25,7 +25,7 @@ exports.create = async (classroom) => {
           id: classroom.teacherId,
         },
       });
-      let createdClass = await Class.create({
+      await Class.create({
         className: classroom.className,
         classCode: randomstring.generate({
           length: 12,
@@ -34,11 +34,12 @@ exports.create = async (classroom) => {
         numberOfStudent: classroom.numberOfStudent,
         banner: classroom.banner,
         teacherName: teacher.fullName,
-      });
-      createdClass.addUser(teacher);
-      resolve({
-        errCode: 0,
-        data: createdClass,
+      }).then((cls) => {
+        cls.addUser(teacher);
+        resolve({
+          errCode: 0,
+          data: cls,
+        });
       });
     } catch (e) {
       reject(e);
@@ -220,6 +221,42 @@ exports.GetListStudentAndMappingID = async (c_id) => {
       resolve({
         errCode: 0,
         data: studentList,
+      });
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+exports.addStudentByClassCode = async (clsCode, userId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!clsCode || !userId) {
+        resolve({
+          errCode: 1,
+          errMessage: "Missing class code or user Id",
+        });
+      }
+      let user = await User.findOne({
+        where: { id: userId },
+      });
+      if (!user) {
+        resolve({
+          errCode: 2,
+          errMessage: `User with id = ${userId} does not exist`,
+        });
+      }
+      let cls = await Class.findOne({ where: { classCode: clsCode } });
+      if (!cls) {
+        resolve({
+          errCode: 2,
+          errMessage: `Class with class code = ${clsCode} does not exist`,
+        });
+      }
+      cls.addUser(user);
+      resolve({
+        errCode: 0,
+        errMessage: "User added to class",
       });
     } catch (e) {
       reject(e);
