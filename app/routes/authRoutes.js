@@ -19,7 +19,14 @@ module.exports = function (app) {
     controller.signup
   );
 
-  app.post("/api/auth/signup/google-sign-up", controller.googleSignUp);
+  app.post(
+    "/api/auth/signup/google-sign-up",
+    [
+      verifySignUp.checkDuplicateUsernameOrEmail,
+      verifySignUp.checkRolesExisted,
+    ],
+    controller.googleSignUp
+  );
 
   app.post("/api/auth/signin/google-sign-in", controller.googleSignIn);
 

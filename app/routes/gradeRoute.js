@@ -8,7 +8,16 @@ module.exports = (app) => {
     [authJwt.verifyToken, authJwt.isTeacher],
     grades.createGradeOfAssignment
   );
-  app.get("/api/grades", grades.findAll);
-  app.get("/api/download/grades", grades.downAll);
-  app.post("/api/upload/grades", upload.single("file"), grades.upload);
+  app.get("/api/grades", [authJwt.verifyToken], grades.findAll);
+  app.get(
+    "/api/download/grades",
+    [authJwt.verifyToken, authJwt.isTeacher],
+    grades.downAll
+  );
+  app.post(
+    "/api/upload/grades",
+    upload.single("file"),
+    [authJwt.verifyToken, authJwt.isTeacher],
+    grades.upload
+  );
 };

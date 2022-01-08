@@ -4,7 +4,7 @@ module.exports = (app) => {
 
   app.post(
     "/api/assignments",
-    // [authJwt.verifyToken, authJwt.isTeacher],
+    [authJwt.verifyToken, authJwt.isTeacher],
     assignment.createAssignment
   );
 
@@ -16,23 +16,31 @@ module.exports = (app) => {
 
   app.get(
     "/api/assignments",
-    // [authJwt.verifyToken],
+    [authJwt.verifyToken],
     assignment.findAllAssignmentWithClassId
   );
 
-  app.get("/api/assignments/:id", assignment.findAssignmentWithClassId);
+  app.get(
+    "/api/assignments/:id",
+    [authJwt.verifyToken],
+    assignment.findAssignmentWithClassId
+  );
 
   app.put(
     "/api/assignments",
-    // [authJwt.verifyToken],
+    [authJwt.verifyToken, authJwt.isTeacher],
     assignment.updateAssignment
   );
 
   app.delete(
     "/api/assignments",
-    // [authJwt.verifyToken, authJwt.isTeacher],
+    [authJwt.verifyToken, authJwt.isTeacher],
     assignment.deleteAssignmentOfClass
   );
 
-  app.get("/api/assignments/:id/grades", assignment.GetGradeOfAssignment);
+  app.get(
+    "/api/assignments/:id/grades",
+    [authJwt.verifyToken],
+    assignment.GetGradeOfAssignment
+  );
 };
