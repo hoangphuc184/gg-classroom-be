@@ -17,7 +17,8 @@ exports.createAssignment = async (infor) => {
             !infor.assignmentTitle ||
             !infor.point ||
             !infor.dueDate ||
-            !infor.classId
+            !infor.classId ||
+            !infor.scale
           ) {
             resolve({
               errCode: 1,
@@ -29,18 +30,17 @@ exports.createAssignment = async (infor) => {
               instruction: infor.instruction,
               point: infor.point,
               dueDate: infor.dueDate,
+              scale: infor.scale,
             }).then(async (assignment) => {
-              if (infor.classId) {
-                await Class.findByPk(infor.classId).then((clss) => {
-                  if (cls) {
-                    assignment.setClass(clss);
-                    resolve({
-                      errCode: 0,
-                      errMessage: "Assignment is created",
-                    });
-                  }
-                });
-              }
+              await Class.findByPk(infor.classId).then((clss) => {
+                if (cls) {
+                  assignment.setClass(clss);
+                  resolve({
+                    errCode: 0,
+                    data: assignment,
+                  });
+                }
+              });
             });
           }
         }
@@ -153,29 +153,22 @@ exports.deleteAssignmentOfClass = async (id, c_id) => {
 exports.updateAssignment = (c_id, infor) => {
   return new Promise(async (resolve, reject) => {
     try {
-      if (!infor.assignmentTitle || !infor.point) {
-        resolve({
-          errCode: 1,
-          errMessage: "Missing required information to update assignment!",
-        });
-      } else {
-        await Assignment.update(
-          {
-            assignmentTitle: infor.assignmentTitle,
-            point: infor.point,
+      await Assignment.update(
+        {
+          assignmentTitle: infor.assignmentTitle,
+          point: infor.point,
+        },
+        {
+          where: {
+            id: c_id,
           },
-          {
-            where: {
-              id: c_id,
-            },
-          }
-        ).then(() => {
-          resolve({
-            errCode: 0,
-            errMessage: "Assignment is updated",
-          });
+        }
+      ).then((assignment) => {
+        resolve({
+          errCode: 0,
+          data: assignment,
         });
-      }
+      });
     } catch (e) {
       reject(e);
     }
