@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const config = require('../config/auth.config');
+const config = require("../config/auth.config");
 const db = require("../models");
 const User = db.users;
 
@@ -8,14 +8,14 @@ verifyToken = (req, res, next) => {
 
   if (!token) {
     return res.status(403).send({
-      message: "No token provided!"
+      message: "No token provided!",
     });
   }
 
-  jwt.verify(token, config.secret, (err, decoded) => {
+  jwt.verify(token, process.env.ACCESS_KEY, (err, decoded) => {
     if (err) {
       return res.status(401).send({
-        message: "Unauthorized!"
+        message: "Unauthorized!",
       });
     }
     req.userId = decoded.id;
@@ -24,8 +24,8 @@ verifyToken = (req, res, next) => {
 };
 
 isAdmin = (req, res, next) => {
-  User.findByPk(req.userId).then(user => {
-    user.getRoles().then(roles => {
+  User.findByPk(req.userId).then((user) => {
+    user.getRoles().then((roles) => {
       for (let i = 0; i < roles.length; i++) {
         if (roles[i].name === "admin") {
           next();
@@ -34,7 +34,7 @@ isAdmin = (req, res, next) => {
       }
 
       res.status(403).send({
-        message: "Require Admin Role!"
+        message: "Require Admin Role!",
       });
       return;
     });
@@ -42,8 +42,8 @@ isAdmin = (req, res, next) => {
 };
 
 isTeacher = (req, res, next) => {
-  User.findByPk(req.userId).then(user => {
-    user.getRoles().then(roles => {
+  User.findByPk(req.userId).then((user) => {
+    user.getRoles().then((roles) => {
       for (let i = 0; i < roles.length; i++) {
         if (roles[i].name === "teacher") {
           next();
@@ -52,7 +52,7 @@ isTeacher = (req, res, next) => {
       }
 
       res.status(403).send({
-        message: "Require Teacher Role!"
+        message: "Require Teacher Role!",
       });
     });
   });

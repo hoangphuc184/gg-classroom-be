@@ -1,7 +1,7 @@
 const nodemailer = require("nodemailer");
 const { google } = require("googleapis");
 const { OAuth2 } = google.auth;
-const OAUTH_PLAYGROUND = "http://developers.google.com/oauthplayground";
+const OAUTH_PLAYGROUND = "https://developers.google.com/oauthplayground";
 
 const {
   GOOGLE_CLIENT_ID,
@@ -17,7 +17,8 @@ const oauth2Client = new OAuth2(
   OAUTH_PLAYGROUND
 );
 
-const sendMail = (to, url, txt) => {
+// send mail
+const sendEmail = (to, url, txt) => {
   oauth2Client.setCredentials({
     refresh_token: GOOGLE_CLIENT_REFRESH_TOKEN,
   });
@@ -31,26 +32,29 @@ const sendMail = (to, url, txt) => {
       clientId: GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_CLIENT_SECRET,
       refreshToken: GOOGLE_CLIENT_REFRESH_TOKEN,
-      accessToken
+      accessToken,
     },
   });
 
   const mailOptions = {
     from: SENDER_EMAIL_ADDRESS,
     to: to,
-    subject: "Google Classroom",
-    html: `<div style="max-width: 700px; margin:auto; border: 10px solid #ddd; padding: 50px 20px; font-size: 110%;">
-      <h2 style="text-align: center; text-transform: uppercase;color: teal;">Welcome to the DevAT channel.</h2>
-      <p>Congratulations! You're almost set to start using DEVAT✮SHOP.
-          Just click the button below to validate your email address.
-      </p>
-      
-      <a href=${url} style="background: crimson; text-decoration: none; color: white; padding: 10px 20px; margin: 10px 0; display: inline-block;">${txt}</a>
-  
-      <p>If the button doesn't work for any reason, you can also click on the link below:</p>
-  
-      <div>${url}</div>
-      </div>`,
+    subject: "Google Classroom Project",
+    html: `
+            <div style="max-width: 700px; margin:auto; border: 10px solid #ddd; padding: 50px 20px; font-size: 110%;">
+            <h2 style="text-align: center; text-transform: uppercase;color: teal;">Welcome to the Google Classroom Project.</h2>
+            <p>
+                Just click the button below to ${txt}.
+            </p>
+            
+            <a href=${url} style="background: crimson; text-decoration: none; color: white; padding: 10px 20px; margin: 10px 0; display: inline-block;">${txt}</a>
+        
+            <p>If the button doesn't work for any reason, you can also click on the link below:</p>
+        
+            <div>
+            <a href=${url}>${url}</a>
+            </div>
+        `,
   };
 
   smtpTransport.sendMail(mailOptions, (err, infor) => {
@@ -59,4 +63,4 @@ const sendMail = (to, url, txt) => {
   });
 };
 
-module.exports = sendMail;
+module.exports = sendEmail;

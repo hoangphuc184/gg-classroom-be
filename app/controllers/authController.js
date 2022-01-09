@@ -20,8 +20,8 @@ const createActivationToken = (payload) => {
 };
 
 const createAccessToken = (payload) => {
-  return jwt.sign(payload, config.secret, {
-    expiresIn: "5m",
+  return jwt.sign(payload, process.env.ACCESS_KEY, {
+    expiresIn: "24h",
   });
 };
 
@@ -30,7 +30,7 @@ exports.signup = (req, res) => {
   User.create({
     username: req.body.username,
     email: req.body.email,
-    password: bcrypt.hashSync(req.body.password, 8),
+    password: bcrypt.hashSync(req.body.password, 12),
     fullName: req.body.fullName,
     DOB: req.body.DOB,
     phoneNumber: req.body.phoneNumber,
@@ -73,12 +73,34 @@ exports.forgotPassword = async (req, res) => {
     const accessToken = createAccessToken({ id: user.id });
     const url = `${CLIENT_URL}/api/auth/reset/${accessToken}`;
 
-    sendMail(email, url, "Reset your password")
-    res.json({msg: "Re-send the password, please check your email"})
+    sendMail(email, url, "Reset your password");
+    res.json({ msg: "Re-send the password, please check your email" });
   } catch (e) {
     return res.status(500).json({
-      msg: err.message,
+      msg: e.message,
     });
+  }
+};
+
+exports.resetPassword = async (req, res) => {
+  try {
+    const { password } = req.body;
+    console.log(password);
+    const passwordHash = await bcrypt.hash(password, 12);
+    await User.update(
+      {
+        password: passwordHash,
+      },
+      {
+        where: {
+          id: req.userId,
+        },
+      }
+    );
+    res.status(200).json({ msg: "Password successfully changed!" });
+    // console.log(req.userId);
+  } catch (e) {
+    return res.status(500).json({ msg: e.message });
   }
 };
 
@@ -105,9 +127,11 @@ exports.signin = (req, res) => {
         });
       }
 
-      var token = jwt.sign({ id: user.id }, config.secret, {
-        expiresIn: 86400, // 24 hours
-      });
+      // var token = jwt.sign({ id: user.id }, process.env.ACCESS_KEY, {
+      //   expiresIn: 86400, // 24 hours
+      // });
+
+      var token = createAccessToken({ id: user.id });
 
       var authorities = [];
       user.getRoles().then((roles) => {
