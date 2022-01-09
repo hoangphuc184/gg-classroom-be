@@ -10,6 +10,8 @@ module.exports = function (app) {
     next();
   });
 
+  // app.post("/api/auth/forgot-password", controller.forgotPassword);
+
   app.post(
     "/api/auth/signup",
     [

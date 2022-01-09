@@ -91,6 +91,7 @@ exports.findByUserId = async (u_id) => {
         let joinedClass = await Class.findAll({
           attributes: [
             "id",
+            "classCode",
             "className",
             "numberOfStudent",
             "teacherName",
@@ -139,7 +140,7 @@ exports.uploadStudentList = async (file, c_id) => {
         });
       }
       let path = __basedir + "/app/resources/uploads/" + file.filename;
-      readXlsxFile(path).then((rows) => {
+      readXlsxFile(path).then(async (rows) => {
         // skip header
         rows.shift();
 
@@ -147,17 +148,16 @@ exports.uploadStudentList = async (file, c_id) => {
 
         rows.forEach((row) => {
           let Student = {
-            id: row[0],
-            studentID: row[1],
-            fullName: row[2],
-            accountLinkTo: row[3],
+            studentID: row[0],
+            fullName: row[1],
+            accountLinkTo: row[2],
             classId: curClass.id,
           };
 
           studentList.push(Student);
         });
 
-        UploadUser.bulkCreate(studentList)
+        await UploadUser.bulkCreate(studentList)
           .then(() => {
             resolve({
               errCode: 0,

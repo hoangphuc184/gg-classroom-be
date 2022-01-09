@@ -12,11 +12,11 @@ module.exports = (app) => {
 
   app.get("/api/student", [authJwt.verifyToken], users.findAllStudentOfClass);
 
-  app.get(
-    "/api/download/student",
-    [authJwt.verifyToken, authJwt.isTeacher],
-    users.downloadAllStudentOfClass
-  );
+  // app.get(
+  //   "/api/download/student",
+  //   [authJwt.verifyToken, authJwt.isTeacher],
+  //   users.downloadAllStudentOfClass
+  // );
   app.post(
     "/api/upload/student",
     upload.single("file"),

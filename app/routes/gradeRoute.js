@@ -9,11 +9,11 @@ module.exports = (app) => {
     grades.createGradeOfAssignment
   );
   app.get("/api/grades", [authJwt.verifyToken], grades.findAll);
-  app.get(
-    "/api/download/grades",
-    [authJwt.verifyToken, authJwt.isTeacher],
-    grades.downAll
-  );
+  // app.get(
+  //   "/api/grades/download-template",
+  //   [authJwt.verifyToken, authJwt.isTeacher],
+  //   grades.downloadGradeTemplate
+  // );
   app.post(
     "/api/upload/grades",
     upload.single("file"),

@@ -6,10 +6,24 @@ const Role = db.roles;
 const Op = db.Sequelize.Op;
 
 const authService = require("../services/authService");
+const sendMail = require("./sendMail");
+
+const { CLIENT_URL } = process.env;
 
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 
+const createActivationToken = (payload) => {
+  return jwt.sign(payload, process.env.ACTIVATION_KEY, {
+    expiresIn: "5m",
+  });
+};
+
+const createAccessToken = (payload) => {
+  return jwt.sign(payload, config.secret, {
+    expiresIn: "5m",
+  });
+};
 
 exports.signup = (req, res) => {
   // Save User to Database
@@ -44,6 +58,28 @@ exports.signup = (req, res) => {
     .catch((err) => {
       res.status(500).send({ message: err.message });
     });
+};
+
+exports.forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ where: { email: email } });
+    if (!user) {
+      return res.status(400).json({
+        msg: "This email does not exist",
+      });
+    }
+
+    const accessToken = createAccessToken({ id: user.id });
+    const url = `${CLIENT_URL}/api/auth/reset/${accessToken}`;
+
+    sendMail(email, url, "Reset your password")
+    res.json({msg: "Re-send the password, please check your email"})
+  } catch (e) {
+    return res.status(500).json({
+      msg: err.message,
+    });
+  }
 };
 
 exports.signin = (req, res) => {
