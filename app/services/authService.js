@@ -43,6 +43,7 @@ exports.googleSignIn = async (googleTokenId) => {
           await User.update(
             {
               googleId: payload["sub"],
+              isVerified: true,
             },
             {
               where: {
