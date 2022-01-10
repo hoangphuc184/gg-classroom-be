@@ -156,7 +156,11 @@ exports.updateAssignment = (c_id, infor) => {
       await Assignment.update(
         {
           assignmentTitle: infor.assignmentTitle,
+          instruction: infor.instruction,
           point: infor.point,
+          dueDate: infor.dueDate,
+          scale: infor.scale,
+          isFinal: infor.isFinal,
         },
         {
           where: {

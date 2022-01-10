@@ -18,6 +18,8 @@ module.exports = function (app) {
     controller.resetPassword
   );
 
+  app.post("/api/auth/verify-account", controller.verifyAccount);
+
   app.post(
     "/api/auth/signup",
     [

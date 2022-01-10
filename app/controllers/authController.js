@@ -25,9 +25,9 @@ const createAccessToken = (payload) => {
   });
 };
 
-exports.signup = (req, res) => {
+exports.signup = async (req, res) => {
   // Save User to Database
-  User.create({
+  await User.create({
     username: req.body.username,
     email: req.body.email,
     password: bcrypt.hashSync(req.body.password, 12),
@@ -36,6 +36,9 @@ exports.signup = (req, res) => {
     phoneNumber: req.body.phoneNumber,
   })
     .then((user) => {
+      const activationToken = createActivationToken({ id: user.id });
+      const url = `${CLIENT_URL}/api/auth/activate/${activationToken}`;
+      sendMail(user.email, url, "Verify your account");
       if (req.body.roles) {
         Role.findAll({
           where: {
@@ -45,19 +48,48 @@ exports.signup = (req, res) => {
           },
         }).then((roles) => {
           user.setRoles(roles).then(() => {
-            res.send({ message: "User was registered successfully!" });
+            res.send({
+              message:
+                "User was registered successfully! Please check your mailbox to verify your account",
+            });
           });
         });
       } else {
         // user role = 1
         user.setRoles([1]).then(() => {
-          res.send({ message: "User was registered successfully!" });
+          res.send({
+            message:
+              "User was registered successfully! Please check your mailbox to verify your account",
+          });
         });
       }
     })
     .catch((err) => {
       res.status(500).send({ message: err.message });
     });
+};
+
+exports.verifyAccount = async (req, res) => {
+  try {
+    const { activationToken } = req.body;
+    const user = jwt.verify(activationToken, process.env.ACTIVATION_KEY);
+    await User.update({ isVerified: true }, { where: { id: user.id } });
+    const check = await User.findOne({
+      where: {
+        id: user.id,
+      },
+    });
+    if (check.isVerified == false) {
+      res.status(400).json({
+        msg: "Verify account fail!",
+      });
+    }
+    res.status(200).json({
+      msg: "Verify account successfully. You can get access to the web now!",
+    });
+  } catch (e) {
+    return res.status(500).json({ msg: e.message });
+  }
 };
 
 exports.forgotPassword = async (req, res) => {
@@ -127,9 +159,12 @@ exports.signin = (req, res) => {
         });
       }
 
-      // var token = jwt.sign({ id: user.id }, process.env.ACCESS_KEY, {
-      //   expiresIn: 86400, // 24 hours
-      // });
+      if (!user.isVerified) {
+        return res.status(401).send({
+          accessToken: null,
+          message: "Account is not verified",
+        });
+      }
 
       var token = createAccessToken({ id: user.id });
 

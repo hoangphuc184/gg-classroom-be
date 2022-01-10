@@ -56,11 +56,29 @@ exports.createGradeOfAssignment = async (req, res) => {
       assignmentId: req.body.assignmentId,
       studentId: req.body.studentId,
     };
-    const gradeRes = await gradeService.createGradeOfAssignment(inputGrade);
+    let gradeRes = await gradeService.createGradeOfAssignment(inputGrade);
     res.status(200).json(gradeRes);
   } catch (e) {
     console.log(e);
     res.status(500).json({
+      errCode: -1,
+      errMessage: "Error from the server",
+    });
+  }
+};
+
+exports.updateGradeOfAssignment = async (req, res) => {
+  try {
+    const inputGrade = {
+      grade: req.body.grade,
+      assignmentId: req.query.a_id,
+      studentId: req.query.stu_id,
+    };
+    let gradeRes = await gradeService.updateGradeOfAssignment(inputGrade);
+    res.status(200).json(gradeRes);
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({
       errCode: -1,
       errMessage: "Error from the server",
     });
@@ -79,45 +97,3 @@ exports.findAll = async (req, res) => {
     console.log(err);
   }
 };
-
-// exports.downloadGradeTemplate = (req, res) => {
-//   try {
-//     Grade.findAll().then((obj) => {
-//       let grades_ = [];
-
-//       obj.forEach((element) => {
-//         grades_.push({
-//           id: element.id,
-//           grade: element.grade,
-//           assignment_id: element.assignment_id,
-//           student_id: element.student_id,
-//         });
-//       });
-
-//       let workbook = new excel.Workbook();
-//       let worksheet = workbook.addWorksheet("Grades");
-
-//       worksheet.columns = [
-//         { header: "Student ID", key: "student_id", width: 10 },
-//         { header: "Grade", key: "grade", width: 5 },
-//       ];
-
-//       // worksheet.addRows(grades_);
-
-//       res.setHeader(
-//         "Content-Type",
-//         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-//       );
-//       res.setHeader(
-//         "Content-Disposition",
-//         "attachment; filename=" + "grades.xlsx"
-//       );
-
-//       return workbook.xlsx.write(res).then(function () {
-//         res.status(200).end();
-//       });
-//     });
-//   } catch (err) {
-//     console.log(err);
-//   }
-// };
