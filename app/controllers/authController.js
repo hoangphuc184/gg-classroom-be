@@ -37,8 +37,8 @@ exports.signup = async (req, res) => {
   })
     .then(async (user) => {
       const activationToken = createActivationToken({ id: user.id });
-      const url = `${CLIENT_URL}/user/activate/${activationToken}`;
-      sendMail(user.email, url, "Verify your account");
+      const url = `${CLIENT_URL}/verify`;
+      sendMail(user.email, url, "Verify your account", activationToken);
       if (req.body.roles) {
         if (req.body.roles[0] == "admin") {
           await User.update({ isVerified: true }, { where: { id: user.id } });
