@@ -35,11 +35,14 @@ exports.signup = async (req, res) => {
     DOB: req.body.DOB,
     phoneNumber: req.body.phoneNumber,
   })
-    .then((user) => {
+    .then(async (user) => {
       const activationToken = createActivationToken({ id: user.id });
       const url = `${CLIENT_URL}/user/activate/${activationToken}`;
       sendMail(user.email, url, "Verify your account");
       if (req.body.roles) {
+        if (req.body.roles[0] == "admin") {
+          await User.update({ isVerified: true }, { where: { id: user.id } });
+        }
         Role.findAll({
           where: {
             name: {
