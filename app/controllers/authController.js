@@ -37,7 +37,7 @@ exports.signup = async (req, res) => {
   })
     .then((user) => {
       const activationToken = createActivationToken({ id: user.id });
-      const url = `${CLIENT_URL}/api/auth/activate/${activationToken}`;
+      const url = `${CLIENT_URL}/user/activate/${activationToken}`;
       sendMail(user.email, url, "Verify your account");
       if (req.body.roles) {
         Role.findAll({
@@ -103,7 +103,7 @@ exports.forgotPassword = async (req, res) => {
     }
 
     const accessToken = createAccessToken({ id: user.id });
-    const url = `${CLIENT_URL}/api/auth/reset/${accessToken}`;
+    const url = `${CLIENT_URL}/user/reset/${accessToken}`;
 
     sendMail(email, url, "Reset your password");
     res.json({ msg: "Re-send the password, please check your email" });
