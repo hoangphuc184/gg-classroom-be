@@ -27,7 +27,7 @@ module.exports = (app) => {
   );
 
   app.get(
-    "/api/admin/users/search",
+    "/api/admins/users/search",
     [authJwt.verifyToken, authJwt.isAdmin],
     admins.searchUserByNameOrEmail
   );
