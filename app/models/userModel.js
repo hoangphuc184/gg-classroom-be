@@ -37,6 +37,11 @@ module.exports = (sequelize, Sequelize) => {
       allowNull: true,
       defaultValue: false,
     },
+    isMapped: {
+      type: Sequelize.BOOLEAN,
+      allowNull: true,
+      defaultValue: false,
+    },
   });
 
   return User;

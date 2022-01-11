@@ -525,6 +525,7 @@ exports.manualMappingStudentId = async (userId, cmd) => {
       if (user) {
         if (cmd == 1) {
           // Map Student Id
+          await User.update({ isMapped: true }, { where: { id: userId } });
           await UploadUser.update(
             { accountLinkTo: user.email },
             {
@@ -540,6 +541,7 @@ exports.manualMappingStudentId = async (userId, cmd) => {
         }
         if (cmd == 0) {
           // Unmap Student id
+          await User.update({ isMapped: false }, { where: { id: userId } });
           await UploadUser.update(
             { accountLinkTo: null },
             {
