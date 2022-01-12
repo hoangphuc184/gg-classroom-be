@@ -44,7 +44,7 @@ const sendEmail = (to, url, txt, token) => {
             <div style="max-width: 700px; margin:auto; border: 10px solid #ddd; padding: 50px 20px; font-size: 110%;">
             <h2 style="text-align: center; text-transform: uppercase;color: teal;">Welcome to the Google Classroom Project.</h2>
             <p>
-                Here is your activation key: <strong>${token}</strong>
+                Here is your key: <strong>${token}</strong>
             </p>
             <p>
                 Just click the button below and use this key to ${txt}.

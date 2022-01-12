@@ -10,7 +10,6 @@ module.exports = (app) => {
 
   app.post(
     "/api/addUser/join",
-    [authJwt.verifyToken, authJwt.isTeacher],
     addUser.joinClass
   );
 };
