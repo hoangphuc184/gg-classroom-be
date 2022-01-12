@@ -92,7 +92,7 @@ exports.verifyAccount = async (req, res) => {
     });
   } catch (e) {
     console.log(e);
-    return res.status(500).json({ msg: "Verify account failedd!" });
+    return res.status(200).json({ msg: "Verify account failed!" });
   }
 };
 
