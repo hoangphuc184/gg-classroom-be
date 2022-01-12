@@ -434,14 +434,6 @@ exports.searchClassByName = async (term) => {
       }
       let searchClasses = [];
       searchClasses = await Class.findAll({
-        attributes: [
-          "id",
-          "className",
-          "teacherName",
-          "numberOfStudent",
-          "banner",
-          "createdAt",
-        ],
         where: {
           className: {
             [Op.like]: `%${term}%`,
