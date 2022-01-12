@@ -28,7 +28,7 @@ exports.joinClass = async (req, res) => {
     console.log(err);
     return res.status(500).json({
       errCode: -1,
-      errMessage: "Error from the server",
+      errMessage: "Class Code not correct",
     });
   }
 };
