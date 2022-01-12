@@ -91,7 +91,8 @@ exports.verifyAccount = async (req, res) => {
       msg: "Verify account successfully. You can get access to the web now!",
     });
   } catch (e) {
-    return res.status(500).json({ msg: e.message });
+    console.log(e);
+    return res.status(500).json({ msg: "Verify account failedd!" });
   }
 };
 
@@ -111,8 +112,9 @@ exports.forgotPassword = async (req, res) => {
     sendMail(email, url, "Reset your password");
     res.json({ msg: "Re-send the password, please check your email" });
   } catch (e) {
+    console.log(e);
     return res.status(500).json({
-      msg: e.message,
+      msg: "Fail to send email to renew password",
     });
   }
 };
