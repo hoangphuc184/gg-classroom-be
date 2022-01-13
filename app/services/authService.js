@@ -10,6 +10,12 @@ const Op = db.Sequelize.Op;
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 
+const createAccessToken = (payload) => {
+  return jwt.sign(payload, process.env.ACCESS_KEY, {
+    expiresIn: "24h",
+  });
+};
+
 verifyGoogleToken = async (googleTokenId) => {
   const ticket = await client.verifyIdToken({
     idToken: googleTokenId,
@@ -52,9 +58,7 @@ exports.googleSignIn = async (googleTokenId) => {
             }
           );
         } else {
-          var token = jwt.sign({ id: foundUser.id }, config.secret, {
-            expiresIn: 86400, // 24 hours
-          });
+          var token = createAccessToken({ id: foundUser.id });
 
           var authorities = [];
           foundUser.getRoles().then((roles) => {
