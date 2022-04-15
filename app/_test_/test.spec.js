@@ -67,4 +67,24 @@ describe("Testing our nodeJS app", () => {
         //  this test will pass unless the value change
         expect(3 * 10).toBe(30);
     });
+        it("Testing using Github Actions", () => {
+        // exoecting 3 functions and receiving 3
+        //  this test will pass unless the value change
+        expect(3 * 11).toBe(33);
+    });
+            it("Testing using Github Actions", () => {
+        // exoecting 3 functions and receiving 3
+        //  this test will pass unless the value change
+        expect(3 + 10).toBe(13);
+    });
+            it("Testing using Github Actions", () => {
+        // exoecting 3 functions and receiving 3
+        //  this test will pass unless the value change
+        expect(11 - 10).toBe(1);
+    });
+            it("Testing using Github Actions", () => {
+        // exoecting 3 functions and receiving 3
+        //  this test will pass unless the value change
+        expect(5 * 10).toBe(50);
+    });
 });
