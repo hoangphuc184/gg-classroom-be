@@ -70,7 +70,7 @@ describe("Testing our nodeJS app", () => {
         it("Testing using Github Actions", () => {
         // exoecting 3 functions and receiving 3
         //  this test will pass unless the value change
-        expect(3 * 11).toBe(30);
+        expect(3 * 11).toBe(33);
     });
             it("Testing using Github Actions", () => {
         // exoecting 3 functions and receiving 3
@@ -80,11 +80,11 @@ describe("Testing our nodeJS app", () => {
             it("Testing using Github Actions", () => {
         // exoecting 3 functions and receiving 3
         //  this test will pass unless the value change
-        expect(3 - 10).toBe(-7);
+        expect(11 - 10).toBe(1);
     });
             it("Testing using Github Actions", () => {
         // exoecting 3 functions and receiving 3
         //  this test will pass unless the value change
-        expect(5 * 10).toBe(45);
+        expect(5 * 10).toBe(50);
     });
 });
