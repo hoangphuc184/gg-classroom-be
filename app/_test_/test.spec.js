@@ -20,6 +20,11 @@ describe("Testing our nodeJS app", () => {
         it("Testing using Github Actions", () => {
         // exoecting 3 functions and receiving 3
         //  this test will pass unless the value change
+        expect(22).toBe(22);
+    });
+        it("Testing using Github Actions", () => {
+        // exoecting 3 functions and receiving 3
+        //  this test will pass unless the value change
         expect(3 + 1).toBe(4);
     });
         it("Testing using Github Actions", () => {
